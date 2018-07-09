@@ -1,0 +1,43 @@
+
+
+<table>
+  <thead>
+    <tr>
+      <th>Слово</th>
+      <th>Визначення</th>
+      <th>Категорія</th>
+      <th>Рейтинг</th>
+      <th>поставте свою оцінку</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @words.each do |word| %>
+      <tr>
+        <td><%= word.name %></td>
+        <td><%= word.definition %></td>
+        <td><%= word.word_category.name %></td>
+        <td><%= (word.total_rating.to_f / word.total_rates.to_f).round(1) %></td>
+        <td>
+          <% for n in 1..5 do %>
+            <%= link_to n, word_rate_path(word_id: word.id, rate: n), method: :post %>
+          <% end %>
+
+        </td>
+        <td><%= link_to 'Переглянути', word %></td>
+        <% if current_user&.admin? %>
+            <td><%= link_to 'Змінити', edit_word_path(word) %></td>
+            <td><%= link_to 'Видалити', word, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <% end %>
+
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= paginate @words %>
+
+<br>
+
+<%= link_to 'Добавить нове слово', new_word_path %>

@@ -1,0 +1,31 @@
+doctype html
+html
+  head
+    meta content=("text/html; charset=UTF-8") http-equiv="Content-Type" /
+    title WordList
+    = csrf_meta_tags
+    = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload'
+    = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
+  body
+    header
+      .menu
+        = link_to 'Головна сторінка', root_path, class: 'menu-item'
+        = link_to 'Пошук слова', 'javascript:void(0)', class: 'menu-item js-search-link'
+        = link_to 'Додати слово', new_word_path, class: 'menu-item'
+        = link_to 'Цікаві статті', articles_path, class: 'menu-item'
+        = link_to 'Зворотній звязок', '/', class: 'menu-item'
+        - if current_user
+          = link_to 'Вихід', destroy_user_session_path, method: :delete, class: 'menu-item'
+        - else
+          = link_to 'Вхід', new_user_session_path, class: 'menu-item'
+          = link_to 'Реєстрація', new_user_registration_path, class: 'menu-item'
+      .search-block-wrapper
+        = form_tag words_path, class: 'search-block', method: :get do
+          = text_field_tag :query, nil, class: 'search-bar', placeholder: 'Введіть слово для пошуку'
+          = submit_tag 'Шукати'
+      .flash-messages
+        p#notice = notice
+        p#alert = alert
+
+
+    = yield
